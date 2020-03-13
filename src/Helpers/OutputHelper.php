@@ -75,6 +75,6 @@ trait OutputHelper
 
     public function response()
     {
-        return implode(';', $this->outputBuffer);
+        return implode(';', $this->outputBuffer) . ';';
     }
 }
