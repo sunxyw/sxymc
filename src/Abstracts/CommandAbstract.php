@@ -41,12 +41,13 @@ abstract class CommandAbstract
      * @param Invoker $invoker
      * @param Collection $arguments
      */
-    public function __construct($name, Invoker $invoker, Collection $arguments)
+    public function __construct(Invoker $invoker, Collection $arguments)
     {
-        $this->name = $name;
         $this->invoker = $invoker;
         $this->arguments = $arguments;
     }
+
+    abstract public function handle();
 
     /**
      * 定义如何执行命令
