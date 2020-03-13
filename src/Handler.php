@@ -4,6 +4,7 @@ namespace Sunxyw\Sxymc;
 
 use Illuminate\Support\Collection;
 use Sunxyw\Sxymc\Abstracts\CommandAbstract;
+use Sunxyw\Sxymc\Entities\Invoker;
 use Sunxyw\Sxymc\Exceptions\CommandNotExistException;
 use Sunxyw\Sxymc\Exceptions\InvalidArgumentException;
 
@@ -44,15 +45,29 @@ class Handler
     /**
      * 注册命令
      *
-     * @param CommandAbstract $command 命令实体类
+     * @param string|callable $command 命令实体类名|匿名命令
+     * @param string|null $command_name 命令名称
      * @return void
      */
-    public function register(CommandAbstract $command)
+    public function register($command, $command_name = null)
     {
-        $command_name = $command->name;
-        $exec = $command->exec;
+        if (is_callable($command)) {
+            if (is_null($command_name)) {
+                throw new InvalidArgumentException('Required command_name when passed object that not extends CommandAbstract.');
+            }
+
+            $type = 'function';
+            $exec = $command;
+        } elseif (is_string($command)) {
+            $type = 'class';
+            $command_name = $command->name;
+            $exec = $command;
+        } else {
+            throw new InvalidArgumentException('Unknown command type.');
+        }
 
         $this->commands->add([
+            'type' => $type,
             'name' => $command_name,
             'exec' => $exec
         ]);
@@ -74,6 +89,15 @@ class Handler
 
         if (is_null($command)) {
             throw new CommandNotExistException("Unknown command: {$command_name}.");
+        }
+
+        $jdata = json_decode($request['jsonData'], true);
+
+        $invoker = new Invoker($jdata['Invoker']);
+
+        if ($command->type == 'class') {
+            $command_instance = new $command->exec($invoker, $request['args']);
+            return $command_instance->exec();
         }
 
         return $command->exec(...$request['args']);
