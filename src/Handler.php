@@ -98,6 +98,8 @@ class Handler
         if ($command->type == 'class') {
             $command_instance = new $command->exec($invoker, $request['args']);
             return $command_instance->exec();
+        } else {
+            return $command->exec($invoker, $request['args']);
         }
 
         return $command->exec(...$request['args']);
