@@ -7,7 +7,7 @@ use Sunxyw\Sxymc\Abstracts\CommandAbstract;
 /**
  * 命令实体类
  *
- * @package [NAMESPACE]
+ * @package Sunxyw\Sxymc\Entities
  * @author sunxyw <xy2496419818@gmail>
  */
 class Command extends CommandAbstract
