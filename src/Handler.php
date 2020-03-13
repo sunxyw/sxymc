@@ -4,6 +4,7 @@ namespace Sunxyw\Sxymc;
 
 use Illuminate\Support\Collection;
 use Sunxyw\Sxymc\Abstracts\CommandAbstract;
+use Sunxyw\Sxymc\Exceptions\InvalidArgumentException;
 
 /**
  * 请求处理类
@@ -59,12 +60,17 @@ class Handler
     /**
      * 处理请求
      *
-     * @param array $request
+     * @param array $request 请求参数，$_POST 或 request()->all()
      * @return void
      */
     public function handle(array $request)
     {
-        // TODO
+        if (!isset($request['args']) || count($request['args']) < 1) {
+            throw new InvalidArgumentException('Argument missing: Required command name.');
+        }
+        $command = $this->commands->where('name', array_shift($request['args']))->first();
+
+        return $command->exec(...$request['args']);
     }
 
     /**
