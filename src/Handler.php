@@ -4,6 +4,7 @@ namespace Sunxyw\Sxymc;
 
 use Illuminate\Support\Collection;
 use Sunxyw\Sxymc\Abstracts\CommandAbstract;
+use Sunxyw\Sxymc\Exceptions\CommandNotExistException;
 use Sunxyw\Sxymc\Exceptions\InvalidArgumentException;
 
 /**
@@ -68,7 +69,12 @@ class Handler
         if (!isset($request['args']) || count($request['args']) < 1) {
             throw new InvalidArgumentException('Argument missing: Required command name.');
         }
-        $command = $this->commands->where('name', array_shift($request['args']))->first();
+        $command_name = array_shift($request['args']);
+        $command = $this->commands->where('name',)->first();
+
+        if (is_null($command)) {
+            throw new CommandNotExistException("Unknown command: {$command_name}.");
+        }
 
         return $command->exec(...$request['args']);
     }
