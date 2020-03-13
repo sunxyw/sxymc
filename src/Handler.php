@@ -7,6 +7,7 @@ use Sunxyw\Sxymc\Abstracts\CommandAbstract;
 use Sunxyw\Sxymc\Entities\Invoker;
 use Sunxyw\Sxymc\Exceptions\CommandNotExistException;
 use Sunxyw\Sxymc\Exceptions\InvalidArgumentException;
+use Sunxyw\Sxymc\Helpers\OutputHelper;
 
 /**
  * 请求处理类
@@ -85,7 +86,7 @@ class Handler
             throw new InvalidArgumentException('Argument missing: Required command name.');
         }
         $command_name = array_shift($request['args']);
-        $command = $this->commands->where('name',)->first();
+        $command = $this->commands->where('name', $command_name)->first();
 
         if (is_null($command)) {
             throw new CommandNotExistException("Unknown command: {$command_name}.");
@@ -95,14 +96,15 @@ class Handler
 
         $invoker = new Invoker($jdata['Invoker']);
 
-        if ($command->type == 'class') {
-            $command_instance = new $command->exec($invoker, $request['args']);
-            return $command_instance->exec();
+        if ($command['type'] == 'class') {
+            $command_instance = new $command['exec']($invoker, $request['args']);
+            return $command_instance->exec(...$request['args']);
         } else {
-            return $command->exec($invoker, $request['args']);
+            return $command['exec'](new class
+            {
+                use OutputHelper;
+            }, $invoker, ...$request['args']);
         }
-
-        return $command->exec(...$request['args']);
     }
 
     /**
