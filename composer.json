@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "illuminate/support": "^6.18.1",
+        "illuminate/support": "^6.2",
         "phpunit/phpunit": "^9.0",
         "mockery/mockery": "^1.3"
     },
