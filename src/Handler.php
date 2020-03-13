@@ -104,7 +104,7 @@ class Handler
             {
                 use OutputHelper;
             };
-            $command['exec']($helper, $invoker, ...$request['args']);
+            return $command['exec']($helper, $invoker, ...$request['args']);
         }
     }
 
