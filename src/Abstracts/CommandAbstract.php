@@ -1,5 +1,7 @@
 <?php
 
+namespace Sunxyw\Sxymc\Abstracts;
+
 use Sunxyw\Sxymc\Entities\Invoker;
 
 abstract class CommandAbstract

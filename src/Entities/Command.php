@@ -2,7 +2,7 @@
 
 namespace Sunxyw\Sxymc\Entities;
 
-use CommandAbstract;
+use Sunxyw\Sxymc\Abstracts\CommandAbstract;
 
 class Command extends CommandAbstract
 {
