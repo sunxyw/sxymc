@@ -17,13 +17,6 @@ class Command extends CommandAbstract
     use OutputHelper;
 
     /**
-     * 输出缓存
-     *
-     * @var array
-     */
-    protected $outputBuffer = [];
-
-    /**
      * 定义如何执行命令
      *
      * @return void
@@ -43,6 +36,6 @@ class Command extends CommandAbstract
     {
         $this->handle();
 
-        return implode(';', $this->outputBuffer);
+        return $this->response();
     }
 }

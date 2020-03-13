@@ -2,8 +2,17 @@
 
 namespace Sunxyw\Sxymc\Helpers;
 
+use InvalidArgumentException;
+
 trait OutputHelper
 {
+    /**
+     * 输出缓存
+     *
+     * @var array
+     */
+    public $outputBuffer;
+
     /**
      * 输出信息
      *
@@ -62,5 +71,10 @@ trait OutputHelper
     public function logConsole($content)
     {
         $this->output('Console', $content);
+    }
+
+    public function response()
+    {
+        return implode(';', $this->outputBuffer);
     }
 }

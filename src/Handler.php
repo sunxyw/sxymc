@@ -100,10 +100,11 @@ class Handler
             $command_instance = new $command['exec']($invoker, $request['args']);
             return $command_instance->exec(...$request['args']);
         } else {
-            return $command['exec'](new class
+            $helper = new class
             {
                 use OutputHelper;
-            }, $invoker, ...$request['args']);
+            };
+            $command['exec']($helper, $invoker, ...$request['args']);
         }
     }
 
